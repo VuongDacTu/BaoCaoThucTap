@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QLBH_TRAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="category_id" />
+    </Key>
+    <Property Name="category_id" Type="Int32" Nullable="false" />
+    <Property Name="category_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="products" Relationship="Self.FK__products__catego__440B1D61" FromRole="categories" ToRole="products" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="customer_id" />
+    </Key>
+    <Property Name="customer_id" Type="Int32" Nullable="false" />
+    <Property Name="customer_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="phone" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="feedbacks" Relationship="Self.FK__feedbacks__custo__534D60F1" FromRole="customers" ToRole="feedbacks" />
+    <NavigationProperty Name="orders" Relationship="Self.FK__orders__customer__48CFD27E" FromRole="customers" ToRole="orders" />
+  </EntityType>
+  <EntityType Name="feedback">
+    <Key>
+      <PropertyRef Name="feedback_id" />
+    </Key>
+    <Property Name="feedback_id" Type="Int32" Nullable="false" />
+    <Property Name="customer_id" Type="Int32" />
+    <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="feedback_date" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="customer" Relationship="Self.FK__feedbacks__custo__534D60F1" FromRole="feedbacks" ToRole="customers" />
+  </EntityType>
+  <EntityType Name="order_details">
+    <Key>
+      <PropertyRef Name="order_detail_id" />
+    </Key>
+    <Property Name="order_detail_id" Type="Int32" Nullable="false" />
+    <Property Name="order_id" Type="Int32" />
+    <Property Name="product_id" Type="Int32" />
+    <Property Name="quantity" Type="Int32" />
+    <Property Name="price" Type="Decimal" Precision="10" Scale="2" />
+    <NavigationProperty Name="order" Relationship="Self.FK__order_det__order__4F7CD00D" FromRole="order_details" ToRole="orders" />
+    <NavigationProperty Name="product" Relationship="Self.FK__order_det__produ__5070F446" FromRole="order_details" ToRole="products" />
+  </EntityType>
+  <EntityType Name="order">
+    <Key>
+      <PropertyRef Name="order_id" />
+    </Key>
+    <Property Name="order_id" Type="Int32" Nullable="false" />
+    <Property Name="customer_id" Type="Int32" />
+    <Property Name="order_date" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="customer" Relationship="Self.FK__orders__customer__48CFD27E" FromRole="orders" ToRole="customers" />
+    <NavigationProperty Name="order_details" Relationship="Self.FK__order_det__order__4F7CD00D" FromRole="orders" ToRole="order_details" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="product_id" />
+    </Key>
+    <Property Name="product_id" Type="Int32" Nullable="false" />
+    <Property Name="product_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="price" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="unit_gam" Type="Int32" />
+    <Property Name="rate" Type="Int32" />
+    <Property Name="category_id" Type="Int32" />
+    <Property Name="image_path0" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="image_path1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="image_path2" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="image_path3" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="category" Relationship="Self.FK__products__catego__440B1D61" FromRole="products" ToRole="categories" />
+    <NavigationProperty Name="order_details" Relationship="Self.FK__order_det__produ__5070F446" FromRole="products" ToRole="order_details" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK__products__catego__440B1D61">
+    <End Role="categories" Type="Self.category" Multiplicity="0..1" />
+    <End Role="products" Type="Self.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="categories">
+        <PropertyRef Name="category_id" />
+      </Principal>
+      <Dependent Role="products">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__feedbacks__custo__534D60F1">
+    <End Role="customers" Type="Self.customer" Multiplicity="0..1" />
+    <End Role="feedbacks" Type="Self.feedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customers">
+        <PropertyRef Name="customer_id" />
+      </Principal>
+      <Dependent Role="feedbacks">
+        <PropertyRef Name="customer_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__orders__customer__48CFD27E">
+    <End Role="customers" Type="Self.customer" Multiplicity="0..1" />
+    <End Role="orders" Type="Self.order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="customers">
+        <PropertyRef Name="customer_id" />
+      </Principal>
+      <Dependent Role="orders">
+        <PropertyRef Name="customer_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__order_det__order__4F7CD00D">
+    <End Role="orders" Type="Self.order" Multiplicity="0..1" />
+    <End Role="order_details" Type="Self.order_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="orders">
+        <PropertyRef Name="order_id" />
+      </Principal>
+      <Dependent Role="order_details">
+        <PropertyRef Name="order_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__order_det__produ__5070F446">
+    <End Role="products" Type="Self.product" Multiplicity="0..1" />
+    <End Role="order_details" Type="Self.order_details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="products">
+        <PropertyRef Name="product_id" />
+      </Principal>
+      <Dependent Role="order_details">
+        <PropertyRef Name="product_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QLBH_TRAEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="categories" EntityType="Self.category" />
+    <EntitySet Name="customers" EntityType="Self.customer" />
+    <EntitySet Name="feedbacks" EntityType="Self.feedback" />
+    <EntitySet Name="order_details" EntityType="Self.order_details" />
+    <EntitySet Name="orders" EntityType="Self.order" />
+    <EntitySet Name="products" EntityType="Self.product" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK__products__catego__440B1D61" Association="Self.FK__products__catego__440B1D61">
+      <End Role="categories" EntitySet="categories" />
+      <End Role="products" EntitySet="products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__feedbacks__custo__534D60F1" Association="Self.FK__feedbacks__custo__534D60F1">
+      <End Role="customers" EntitySet="customers" />
+      <End Role="feedbacks" EntitySet="feedbacks" />
+    </AssociationSet>
+    <AssociationSet Name="FK__orders__customer__48CFD27E" Association="Self.FK__orders__customer__48CFD27E">
+      <End Role="customers" EntitySet="customers" />
+      <End Role="orders" EntitySet="orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__order_det__order__4F7CD00D" Association="Self.FK__order_det__order__4F7CD00D">
+      <End Role="orders" EntitySet="orders" />
+      <End Role="order_details" EntitySet="order_details" />
+    </AssociationSet>
+    <AssociationSet Name="FK__order_det__produ__5070F446" Association="Self.FK__order_det__produ__5070F446">
+      <End Role="products" EntitySet="products" />
+      <End Role="order_details" EntitySet="order_details" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
